@@ -11,8 +11,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       display_name: {
-        // allowNull: false,
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
+        field: 'display_name'
       },
       email: {
         type: Sequelize.STRING,
