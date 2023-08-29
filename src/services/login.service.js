@@ -6,11 +6,13 @@ const getAccess = async (email, password) => {
     email,
   } });
 
+  const userId = user.id;
+
   if (!user || user.password !== password) {
     return ({ message: 'Invalid fields' });
   }
 
-  const token = generateToken({ email });
+  const token = generateToken({ email, userId });
   return token;
 };
 
