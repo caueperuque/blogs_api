@@ -39,8 +39,26 @@ const getBlogPostById = async (req, res) => {
   }
 };
 
+const updatedPost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const token = req.headers.authorization;
+
+  try {
+    const updatePost = await postService.updatedPost({ title, content, id, token });
+    console.log(updatePost);
+
+    if (updatePost.message) return res.status(401).json(updatePost);
+
+    return res.status(200).json(updatePost);
+  } catch (err) {
+    return res.status(401).json({ messsage: 'Unauthorized user' });
+  }
+};
+
 module.exports = {
   createPost,
   getAllBlogPosts,
   getBlogPostById,
+  updatedPost,
 };

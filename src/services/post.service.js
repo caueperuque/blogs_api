@@ -1,4 +1,5 @@
 const { sequelize, PostCategory, BlogPost, User, Category } = require('../models');
+const decodedToken = require('../utils/decodedToken');
 
 const createPost = async ({ title, content, userId, categoryIds }) => {
   const result = await sequelize.transaction(async (t) => {
@@ -59,8 +60,32 @@ const getBlogPostById = async (id) => {
   return blogPost;
 };
 
+const updatedPost = async ({ title, content, id, token }) => {
+  const updatePost = await BlogPost.findOne({ where: { id } });
+
+  if (decodedToken(token).payload.userId === updatePost.userId) {
+    await BlogPost.update({ title, content, updated: Date.now() }, {
+      where: { id },
+    });
+    return BlogPost.findOne({
+      where: { id },
+      include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { 
+          model: Category, 
+          as: 'categories', 
+          attributes: { exclude: ['PostCategory'] },
+          through: { attributes: [] }, // Exclui a tabela de junção PostCategory
+        },
+      ],
+    });
+  }
+
+  return ({ message: 'Unauthorized user' });
+};
+
 module.exports = {
   createPost,
   getAllBlogPosts,
   getBlogPostById,
+  updatedPost,
 };
