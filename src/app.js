@@ -18,7 +18,7 @@ app.use('/login', loginRoute);
 app.use('/user', userRoute);
 app.use('/categories', categoryRoute);
 app.use('/post', postRoute); 
-// Testando avalidor do GitHub
+// Testando avalidor do GitHub v2
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
 module.exports = app;
